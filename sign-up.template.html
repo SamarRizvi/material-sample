@@ -1,0 +1,301 @@
+<div class="signup-view container" ng-cloak  cg-busy="[signUpC.signUpProcess]">
+    <div class="inner-content">
+        <div layout-align="center stretch" style="margin: 40px 0;">
+            <h5 class="text-center theme-color" style="font-size:30px;">Merlin
+                Tech is going to transform the semiconductor industry.</h5>
+            <h5 class="text-center theme-color" style="font-size:18px; margin-top: 30px;">Sign up and be the first to
+                find out how.</h5>
+        </div>
+        <div layout-align="center stretch" layout="column" flex>
+            <form name="signUpC.form">
+                <div layout-gt-xs="row" class="md-inline-form" md-theme="signup-box">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Name</label>
+                        <input required name="visitorName" ng-model="signUpC.visitor.fullName" autocomplete="off"
+                               focus-if focus-delay="500">
+                        <div ng-messages="signUpC.form.visitorName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <div flex="5"></div>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Corporate Email</label>
+                        <input id="subscriberEmail" required name="corporateEmail" ng-model="signUpC.visitor.email"
+                               ng-pattern="signUpC.emailRegEx" ng-change="signUpC.checkEmailExists()"
+                               autocomplete="off" style="padding-right:4%">
+                        <i class="fa fa-sm fa-question-circle" style="position:absolute;left:96%;top:10px;">
+                            <md-tooltip style="font-size:1.1em; max-width:98vw;">
+                                We encourage providing your corporate email so we can associate you with your
+                                company
+                                account
+                            </md-tooltip>
+                        </i>
+                        <div ng-if="signUpC.emailExists" class="md-input-message-animation"
+                             style="color:orange; font-weight:bold">
+                            Email already registered.
+                        </div>
+
+                        <div ng-if="signUpC.generalEmail" class="md-input-message-animation"
+                             style="color:orange; font-weight:bold">
+                            Corporate Email Address is encouraged.
+                        </div>
+
+                        <div ng-messages="signUpC.form.corporateEmail.$error">
+                            <div ng-message-exp="['required', 'pattern']">
+                                <!--<span ng-if="!signUpC.emailDomainCheck">Please enter a valid email address.</span>-->
+                                Please enter a valid email address.
+                            </div>
+                        </div>
+                    </md-input-container>
+                    <div flex="5"></div>
+                    <md-autocomplete flex-gt-xs required
+                                     md-input-name="companyName"
+                                     md-no-cache="true"
+                                     md-input-minlength="2"
+                                     md-selected-item="signUpC.visitor.company"
+                                     md-search-text="signUpC.visitor.searchText"
+                                     md-items="item in signUpC.visitor.querySearch(signUpC.visitor.searchText)"
+                                     md-item-text="item.name"
+                                     md-floating-label="Company Name">
+                        <md-item-template>
+                            <span md-highlight-text="signUpC.visitor.searchText">{{item.name}}</span>
+                        </md-item-template>
+                        <div ng-messages="signUpC.form.companyName.$error"
+                             ng-if="signUpC.form.companyName.$touched">
+                            <div ng-message="required">Company is required.</div>
+                            <div ng-message="minlength">Your entry is not long enough.</div>
+                        </div>
+                    </md-autocomplete>
+                </div>
+                <p><br></p>
+                <div layout-gt-xs="row" class="md-inline-form" md-theme="signup-box">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Company Website</label>
+                        <input name="website" ng-model="signUpC.visitor.url"
+                               ng-pattern="signUpC.urlRegEx"
+                               ng-blur="signUpC.validateEmailAgainstUrl()" autocomplete="off">
+                        <div ng-messages="signUpC.form.website.$error">
+                            <div ng-message-exp="['required', 'pattern']">
+                                Please enter a valid website URL.
+                            </div>
+                        </div>
+                    </md-input-container>
+                    <div flex="5"></div>
+                    <div layout="row" flex>
+                        <md-input-container class="md-block" flex="60">
+                            <label>Phone Number</label>
+                            <input name="phoneNumber" ng-model="signUpC.visitor.phoneNumber" phone-number
+                                   autocomplete="off">
+
+                            <!--<div ng-if="!signUpC.phoneValid" class="md-input-message-animation">-->
+                            <!--Please enter a valid phone number.-->
+                            <!--</div>-->
+
+                            <div ng-messages="signUpC.form.phoneNumber.$error">
+                                <div ng-message="phoneNumber">
+                                    Please enter a valid phone number.
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                            <label
+                                ng-class="{'label-disabled': !signUpC.form.phoneNumber.$valid || !signUpC.form.phoneNumber.$viewValue}">Ext.</label>
+                            <input name="phoneExtension" ng-model="signUpC.visitor.ext" autocomplete="off"
+                                   ng-disabled="!signUpC.form.phoneNumber.$valid || !signUpC.form.phoneNumber.$viewValue"
+                                   ng-change="signUpC.checkPhoneExtension()"
+                                   focus-if="signUpC.form.phoneNumber.$valid && signUpC.form.phoneNumber.$viewValue">
+                        </md-input-container>
+                    </div>
+                    <div flex="5"></div>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Group / Business Unit</label>
+                        <input name="group" ng-model="signUpC.visitor.group" autocomplete="off">
+                    </md-input-container>
+                </div>
+                <div class="wide-div">
+                    <div class="signupCheckbox container">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Categories applicable to your company
+                                    <small layout-xs="column" layout-padding>(Check all that apply)</small>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div layout="column" layout-wrap layout-gt-sm="row" layout-sm="row">
+                                    <div flex-xs flex="25" flex-sm="50">
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor IP Vendor')"
+                                                         ng-click="signUpC.toggle('Semiconductor IP Vendor')"
+                                                         aria-label="Semiconductor IP Vendor">
+                                                Semiconductor IP Vendor
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor Design Services Provider')"
+                                                         ng-click="signUpC.toggle('Semiconductor Design Services Provider')"
+                                                         aria-label="Semiconductor Design Services Provider">
+                                                Semiconductor Design Services Provider
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Design/Manufacturer of Semiconductor ICs')"
+                                                         ng-click="signUpC.toggle('Design/Manufacturer of Semiconductor ICs')"
+                                                         aria-label="Design/Manufacturer of Semiconductor ICs">
+                                                Design/Manufacturer of Semiconductor ICs
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor Foundry')"
+                                                         ng-click="signUpC.toggle('Semiconductor Foundry')"
+                                                         aria-label="Semiconductor Foundry">
+                                                Semiconductor Foundry
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                    <div flex-xs flex="25" flex-sm="50">
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('ASIC Design & Manufacturer')"
+                                                         ng-click="signUpC.toggle('ASIC Design & Manufacturer')"
+                                                         aria-label="ASIC Design & Manufacturer">
+                                                ASIC Design & Manufacturer
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor IP Sales Representative')"
+                                                         ng-click="signUpC.toggle('Semiconductor IP Sales Representative')"
+                                                         aria-label="Semiconductor IP Sales Representative">
+                                                Semiconductor IP Sales Representative
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor Distributors')"
+                                                         ng-click="signUpC.toggle('Semiconductor Distributors')"
+                                                         aria-label="Semiconductor Distributors">
+                                                Semiconductor Distributors
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('OEM')"
+                                                         ng-click="signUpC.toggle('OEM')"
+                                                         aria-label="OEM">
+                                                OEM
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                    <div flex-xs flex="25" flex-sm="50">
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Incubator or Technology Park')"
+                                                         ng-click="signUpC.toggle('Incubator or Technology Park')"
+                                                         aria-label="Incubator or Technology Park">
+                                                Incubator or Technology Park
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('EDA Software Engineering')"
+                                                         ng-click="signUpC.toggle('EDA Software Engineering')"
+                                                         aria-label="EDA Software Engineering">
+                                                EDA Software Engineering
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Independent Consultant or Consulting Company')"
+                                                         ng-click="signUpC.toggle('Independent Consultant or Consulting Company')"
+                                                         aria-label="Independent Consultant or Consulting Company">
+                                                Independent Consultant or Consulting Company
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Foundry Services Provider')"
+                                                         ng-click="signUpC.toggle('Foundry Services Provider')"
+                                                         aria-label="Foundry Services Provider">
+                                                Foundry Services Provider
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                    <div flex-xs flex="25" flex-sm="50">
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('PCB Manufacturer')"
+                                                         ng-click="signUpC.toggle('PCB Manufacturer')"
+                                                         aria-label="PCB Manufacturer">
+                                                PCB Manufacturer
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor Packaging & Material Manufacturer')"
+                                                         ng-click="signUpC.toggle('Semiconductor Packaging & Material Manufacturer')"
+                                                         aria-label="Semiconductor Packaging & Material Manufacturer">
+                                                Semiconductor Packaging & Material Manufacturer
+                                            </md-checkbox>
+                                        </div>
+                                        <div flex>
+                                            <md-checkbox class="md-warn"
+                                                         ng-checked="signUpC.exists('Semiconductor Packaging Services Provider')"
+                                                         ng-click="signUpC.toggle('Semiconductor Packaging Services Provider')"
+                                                         aria-label="Semiconductor Packaging Services Provider">
+                                                Semiconductor Packaging Services Provider
+                                            </md-checkbox>
+                                        </div>
+                                        <div layout="row">
+                                            <div flex-gt-sm flex="25">
+                                                <md-checkbox class="md-warn" ng-checked="signUpC.exists('Other')"
+                                                             ng-click="signUpC.toggle('Other')"
+                                                             aria-label="Other">
+                                                    Other
+                                                </md-checkbox>
+                                            </div>
+                                            <md-input-container flex-gt-sm flex="75"
+                                                                class="md-block no-margin no-padding other-input"
+                                                                md-no-float
+                                                                ng-show="signUpC.otherEnabled" md-theme="signup-box">
+                                                <input name="otherCategory" ng-model="signUpC.visitor.otherCategory"
+                                                       placeholder="Other Category" focus-if="signUpC.otherEnabled">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div layout-gt-xs="row" layout-xs="column" style="margin-top: 15px;">
+                    <div class="text-center visible-xs" style="width: 100%;">
+                        <md-checkbox class="md-warn beta-participate checkbox-highlight"
+                                     ng-model="signUpC.visitor.betaParticipate"
+                                     aria-label="I would like to participate in the beta launch of the program">
+                            <span
+                                class="theme-color">I would also like to participate in the beta launch of the platform</span>
+                        </md-checkbox>
+                    </div>
+                </div>
+                <div layout-gt-xs="row" layout-xs="column" style="margin-top: 15px;">
+                    <div class="text-center hidden-xs" style="width: 100%;">
+                        <md-checkbox class="md-warn beta-participate checkbox-highlight"
+                                     ng-model="signUpC.visitor.betaParticipate"
+                                     aria-label="I would like to participate in the beta launch of the program">
+                            <span
+                                class="theme-color">I would also like to participate in the beta launch of the platform</span>
+                        </md-checkbox>
+                    </div>
+                </div>
+                <div class="text-center" style="width:100%">
+                    <md-button md-theme="signup-box" class="md-raised md-warn" ng-click="signUpC.showConfirm($event)"
+                               ng-disabled="signUpC.form.$invalid"><strong>Submit</strong></md-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

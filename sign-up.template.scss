@@ -1,0 +1,85 @@
+.signupCheckbox {
+    padding:0;
+    .panel {
+        background-color: rgba(255, 255, 255, 0);
+        border:none;
+        margin-bottom:0;
+    }
+    .panel-default > .panel-heading {
+        background-color: rgba(255, 255, 255, 0);
+        font-weight: bold;
+        color: #fff;
+        border:none;
+        padding-top: 20px;
+        h3 {
+            font-weight:bold;
+            text-shadow:none;
+        }
+    }
+    .panel-body {
+        padding-bottom:0;
+    }
+    .other-input {
+        top: -15px;
+        height: 30px;
+        margin-top: 0;
+        margin-bottom:0;
+    }
+    md-checkbox ._md-container {
+        top:0;
+        -webkit-transform: none; /* Safari and Chrome */
+        -moz-transform: none; /* Firefox */
+        -ms-transform: none; /* IE 9 */
+        -o-transform: none; /* Opera */
+        transform: none;
+    }
+}
+
+.signup-view {
+
+    .checkbox-highlight {
+        margin: 20px 0;
+        margin-bottom: 30px;
+    }
+
+    .beta-participate {
+        ._md-icon {
+            border-color: rgba(247, 150, 70, 1) !important;
+        }
+    }
+
+    .hidden-xs {
+        .beta-participate {
+            font-size: 18px;
+        }
+    }
+
+    .visible-xs {
+        md-checkbox ._md-container {
+            top:0;
+            -webkit-transform: none; /* Safari and Chrome */
+            -moz-transform: none; /* Firefox */
+            -ms-transform: none; /* IE 9 */
+            -o-transform: none; /* Opera */
+            transform: none;
+        }
+    }
+
+    .md-inline-form md-input-container {
+        margin-top: 0;
+        margin-bottom: 18px;
+    }
+
+    .md-inline-form:first-child md-input-container {
+        margin: 18px 0;
+    }
+    .inner-content {
+        margin-top: 20px;
+    }
+
+    .panel-body {
+        .flex-25 .flex {
+            min-height:55px;
+        }
+    }
+}
